@@ -103,8 +103,68 @@ public class Colosseum {
      *         <p>
      */
     public static Pokemon buildPokemon() {
-        Pokemon returnPokemon = null;
-        return returnPokemon;
+        Scanner scan = new Scanner(System.in);
+        Pokemon pokemon;
+        System.out.println("Please name your Pokemon");
+        String name = scan.next();
+        System.out.println("Select from the following Pokemon types:");
+        System.out.println("1 - Electric Pokemon");
+        System.out.println("2 - Fire Pokemon");
+        System.out.println("3 - Water Pokemon");
+        String type = "0";
+        while (!(type.equals("1") || type.equals("2") || type.equals("3"))) {
+            System.out.println("You must pick either 1, 2, or 3");
+            type = scan.next();
+        }
+        if (type.equals("1")) {
+            pokemon = new ElectricPokemon();
+        } else if (type.equals("2")) {
+            pokemon = new FirePokemon();
+        } else {
+            pokemon = new WaterPokemon();
+        }
+        pokemon.setName(name);
+        System.out.println("How many hit points will it have? (1-50)");
+        String hitPoints;
+        while (pokemon.getHitPoints() < 1 || pokemon.getHitPoints() > MAX_HIT_POINTS) {
+            hitPoints = scan.next();
+            try {
+                pokemon.setHitPoints(Integer.parseInt(hitPoints));
+                if (pokemon.getHitPoints() < 1 || pokemon.getHitPoints() > MAX_HIT_POINTS) {
+                    System.out.println("Hit points must be between 1 and 50: " + hitPoints);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number: " + hitPoints);
+            }
+        }
+        System.out.println("Enter both attack and defense points");
+        System.out.println("Attack and defense must add up to at most 50, each must be at least 1");
+        System.out.println("Enter attack, then defense");
+        String attackLevel;
+        String defenseLevel;
+        while (pokemon.getAttackLevel() < 1 || pokemon.getDefenseLevel() < 1
+                || pokemon.getAttackLevel() + pokemon.getDefenseLevel() > MAX_HIT_POINTS) {
+            attackLevel = scan.next();
+            defenseLevel = scan.next();
+            try {
+                pokemon.setAttackLevel(Integer.parseInt(attackLevel));
+                pokemon.setDefenseLevel(Integer.parseInt(defenseLevel));
+                if (pokemon.getAttackLevel() < 1) {
+                    System.out.println("Attack must be > 1: " + attackLevel);
+                }
+                if (pokemon.getDefenseLevel() < 1) {
+                    System.out.println("Defense must be > 1: " + defenseLevel);
+                }
+                if (pokemon.getAttackLevel() + pokemon.getDefenseLevel() > MAX_HIT_POINTS) {
+                    System.out.println("Attack and defense must be <= 50: "
+                + (pokemon.getAttackLevel() + pokemon.getDefenseLevel()));
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number. Attack: " + attackLevel
+                        + " Defense: " + defenseLevel);
+            }
+        }
+        return pokemon;
     }
 
     /**
